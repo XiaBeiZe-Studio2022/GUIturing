@@ -1,0 +1,17 @@
+{
+  "font": "MiSans.ttf",
+  "mainMenu": {
+    "debug": "Debug",
+    "tools": "工具"
+  },
+  "debugMenu": {
+    "title": "调试",
+    "tooltip": "这是一个调试窗口！"
+  },
+  "toolsMenu": {
+    "title": "工具",
+    "tools": [
+      "下载作品"
+    ]
+  }
+}
