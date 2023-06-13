@@ -4,7 +4,7 @@ import urllib.parse
 import dearpygui.dearpygui as dpg
 import urllib3
 import os
-import Download_project
+import download_project
 
 http = urllib3.PoolManager()
 
@@ -17,7 +17,7 @@ with open("config.json", "rb+") as file:
 def get_project():
     url = dpg.get_value("DownloadUrl")
     path = dpg.get_value("DownloadPath")
-    if (url == "" or path == ""):
+    if url == "" or path == "":
         print(2)
         return
     url = urllib.parse.urlparse(url)[2].split('/')[2]
@@ -26,7 +26,7 @@ def get_project():
     print(1)
     dpg.configure_item("downloading", show=True)
     dpg.configure_item("downloadingtext", show=True)
-    Download_project.get_project("https://icode.youdao.com/scratch/project/" + url, ".~temp~")
+    download_project.get_project("https://icode.youdao.com/scratch/project/" + url, ".~temp~")
     ppath = os.path.abspath("./.~temp~.sb3")
     shutil.move(ppath, path + "/" + detail["data"]["title"] + ".sb3")
     dpg.configure_item("downloadingtext", show=False)
@@ -37,10 +37,6 @@ def get_project():
 def debug():
     with dpg.window(label=pconfig["debugMenu"]["title"]):
         dpg.add_text(default_value=pconfig["debugMenu"]["tooltip"])
-
-
-def tool():
-    dpg.configure_item("tools", show=True)
 
 
 dpg.create_context()
@@ -70,7 +66,7 @@ with dpg.window(label=pconfig["toolsMenu"]["title"], tag="tools", show=False):
         dpg.configure_item("downloadingstext", show=False)
 with dpg.window(tag="mainMenu", label="GUIturing主菜单", no_close=True, width=200, height=500):
     dpg.add_button(label=pconfig["mainMenu"]["debug"], callback=debug)
-    dpg.add_button(label="工具", callback=tool)
+    dpg.add_button(label="工具", callback=lambda: dpg.configure_item("tools", show=True))
 dpg.create_viewport(title="GUIturing")
 dpg.setup_dearpygui()
 dpg.show_viewport()
