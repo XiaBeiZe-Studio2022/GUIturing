@@ -12,6 +12,9 @@
     "title": "工具",
     "tools": [
       "下载作品"
-    ]
+    ],
+    "bot": {
+      "defaultEditor": "vscodium"
+    }
   }
 }
