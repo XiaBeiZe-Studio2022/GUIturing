@@ -136,9 +136,11 @@ def debug():
         dpg.add_text(default_value=config["debugMenu"]["tooltip"])
 
 
-def runBot(user_data):
-    path = "./Bots/" + user_data
-    path = os.path.abspath(path)
+def runBot():
+    user_data="运行 "+ dpg.get_value("chooseBot")
+    logger.debug(user_data)
+    with dpg.window(label=user_data,modal=True):
+        dpg.add_button(label="运行")
 
 
 def closeErrorWindow():
@@ -154,7 +156,6 @@ def openBotWindow():
             dpg.add_text("没有登录")
             return 0
     dpg.configure_item("bot", show=True)
-
 
 def getInfo():
     info = GetInfo.getInfo(dpg.get_value("cookie"))
@@ -173,11 +174,18 @@ def getInfo():
         dpg.configure_item("mainMenu", show=True)
     return info
 
-
+with dpg.theme() as global_theme:
+    with dpg.theme_component(dpg.mvAll):
+        dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 5, category=dpg.mvThemeCat_Core)
+    with dpg.theme_component(dpg.mvButton):
+        dpg.add_theme_color(dpg.mvThemeCol_Button,(133, 193, 233))
+        dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered,( 93, 173, 226 ))
+        dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, (93, 173, 226))
+dpg.bind_theme(global_theme)
 with dpg.window(label="机器人", show=False, tag="bot"):
     bots = os.listdir(".\\Bots")
     dpg.add_listbox(items=bots, label="请选择一个机器人", tag="chooseBot")
-    dpg.add_button(label="确定", tag="runBot", user_data=dpg.get_value("chooseBot"))
+    dpg.add_button(label="确定", tag="runBot",callback=runBot)
 
 with dpg.window(label=config["toolsMenu"]["title"], tag="tools", show=False):
     dpg.add_button(label=config["toolsMenu"]["tools"][0])
@@ -208,9 +216,12 @@ with dpg.window(tag="login", label="登录", no_close=True, modal=True, height=3
     with dpg.value_registry():
         dpg.add_string_value(tag="cookie")
     dpg.add_input_text(label="cookie", source="cookie")
+    rightCookie=False
     dpg.add_button(label="确认", callback=getInfo)
     dpg.add_button(label="不登录", callback=lambda: dpg.configure_item("mainMenu", show=True))
 dpg.create_viewport(title="GUIturing")
+dpg.set_viewport_small_icon("./logo.ico")
+dpg.set_viewport_large_icon("./logo.ico")
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.start_dearpygui()
