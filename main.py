@@ -86,7 +86,7 @@ def download_vscode():
     os.remove("~temp~")
 
 
-if (not (platform.platform() != "Windows")):
+if (not ("Windows" in platform.platform())):
     with dpg.window(label="不支持", no_close=True):
         dpg.add_text("不支持的系统")
     dpg.create_viewport(title="Error")
@@ -151,7 +151,7 @@ def closeErrorWindow():
 
 
 def openBotWindow():
-    if (not (rightCookie)):
+    if (not (rightCookie) and not(config["botMenu"]["forceEnableRunBotMenu"])):
         with dpg.window(label="没有登录", modal=True):
             dpg.add_text("没有登录")
             return 0
@@ -183,7 +183,7 @@ with dpg.theme() as global_theme:
         dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, (93, 173, 226))
 dpg.bind_theme(global_theme)
 with dpg.window(label="机器人", show=False, tag="bot"):
-    bots = os.listdir(".\\Bots")
+    bots = os.listdir("Bots")
     dpg.add_listbox(items=bots, label="请选择一个机器人", tag="chooseBot")
     dpg.add_button(label="确定", tag="runBot",callback=runBot)
 
