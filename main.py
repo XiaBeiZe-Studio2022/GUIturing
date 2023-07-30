@@ -52,6 +52,9 @@ logger.addHandler(stream_handler)
 
 dpg.create_context()
 
+shutil.rmtree("./temp")
+os.mkdir("./temp")
+
 with open("./Shit/" + str(random.randint(1, 10)) + ".txt") as shit:
     print(shit.read())
 # 读取配置
@@ -136,12 +139,16 @@ def debug():
         dpg.add_text(default_value=config["debugMenu"]["tooltip"])
 
 
-def runBot():
+def runBotMenu():
     user_data="运行 "+ dpg.get_value("chooseBot")
     logger.debug(user_data)
     with dpg.window(label=user_data,modal=True):
-        dpg.add_button(label="运行")
+        dpg.add_button(label="运行",callback=runBot)
 
+def runBot():
+    source="Bots/"+dpg.get_value("chooseBot")+"/bot.py"
+    target="temp/temp.py"
+    shutil.copy(source,target)
 
 def closeErrorWindow():
     time.sleep(0.1)
@@ -185,7 +192,7 @@ dpg.bind_theme(global_theme)
 with dpg.window(label="机器人", show=False, tag="bot"):
     bots = os.listdir("Bots")
     dpg.add_listbox(items=bots, label="请选择一个机器人", tag="chooseBot")
-    dpg.add_button(label="确定", tag="runBot",callback=runBot)
+    dpg.add_button(label="确定", tag="runBot",callback=runBotMenu)
 
 with dpg.window(label=config["toolsMenu"]["title"], tag="tools", show=False):
     dpg.add_button(label=config["toolsMenu"]["tools"][0])
